@@ -17,7 +17,7 @@ public class ll implements CommandExecutor {
 
 		//Check is command sender is a player
 		if (!(sender instanceof Player)) {
-			sender.sendMessage("&cYou cannot add a player to a region!");
+			sender.sendMessage("&cYou cannot use this command from the console!");
 			return true;
 		}
 
@@ -27,7 +27,7 @@ public class ll implements CommandExecutor {
 		double x = p.getLocation().getX();
 		double z = p.getLocation().getZ();
 
-		if (!(p.hasPermission("vanillatpll.ll"))) {
+		if (!(p.hasPermission("ukutils.ll"))) {
 			p.sendMessage(ChatColor.RED + "You do not have permission for this command!");
 			return true;
 		}

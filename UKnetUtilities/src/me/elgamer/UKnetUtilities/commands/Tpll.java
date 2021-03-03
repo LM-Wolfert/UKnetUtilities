@@ -17,14 +17,14 @@ public class Tpll implements CommandExecutor {
 
 		//Check is command sender is a player
 		if (!(sender instanceof Player)) {
-			sender.sendMessage("&cYou cannot add a player to a region!");
+			sender.sendMessage("&cYou cannot use this command from console!");
 			return true;
 		}
 
 		//Convert sender to player
 		Player p = (Player) sender;
 
-		if (!(p.hasPermission("vanillatpll.tpll"))) {
+		if (!(p.hasPermission("ukutils.tpll"))) {
 			p.sendMessage(ChatColor.RED + "You do not have permission for this command!");
 			return true;
 		}

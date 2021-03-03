@@ -1,7 +1,7 @@
-name: VanillaTpll
-version: 1.1
-main: me.elgamer.vanillatpll.Main
-description: Vanilla Tpll
+name: UKnetUtilities
+version: 1.0
+main: me.elgamer.UKnetUtilities.Main
+description: UKnet Utilities Plugin
 
 commands:
     tpll:
