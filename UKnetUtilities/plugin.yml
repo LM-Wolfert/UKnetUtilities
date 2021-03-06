@@ -5,9 +5,20 @@ description: UKnet Utilities Plugin
 
 commands:
     tpll:
-        usage: /<command> <lat> <lon>
         description: Tpll
     ll:
         aliases: [location, coordinates, co]
         usage: /<command>
         description: Get coordinates of player.
+    nv:
+        aliases: [nightvision]
+        usage: /<command>
+        description: Give the player night vision.
+    tp:
+    	aliases: [teleport]
+    	usage: /<command> <player>
+    	description: Tp command.
+   	tptoggle:
+   		aliases: [toggletp]
+   		useage: /<command>
+   		description: Toggles tp command, if enabled nobody will be able to teleport to you.

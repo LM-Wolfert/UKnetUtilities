@@ -30,7 +30,8 @@ public class Tpll implements CommandExecutor {
 		}
 
 		if(args.length==0) {
-			return false;
+			p.sendMessage(ChatColor.RED + "/tpll <lat> <lon>");
+			return true;
 		}
 
 		String[] splitCoords = args[0].split(",");
@@ -48,7 +49,8 @@ public class Tpll implements CommandExecutor {
 		}
 
 		if(args.length!=2) {
-			return false;
+			p.sendMessage(ChatColor.RED + "/tpll <lat> <lon>");
+			return true;
 		}
 
 		double lon, lat;
@@ -57,7 +59,8 @@ public class Tpll implements CommandExecutor {
 			lat = Double.parseDouble(args[0]);
 			lon = Double.parseDouble(args[1]);
 		} catch(Exception e) {
-			return false;
+			p.sendMessage(ChatColor.RED + "/tpll <lat> <lon>");
+			return true;
 		}
 		
 		if (lat>90 || lat<-90) {
