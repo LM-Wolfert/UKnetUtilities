@@ -1,11 +1,9 @@
 name: UKnetUtilities
-version: 1.0
+version: 1.2
 main: me.elgamer.UKnetUtilities.Main
 description: UKnet Utilities Plugin
 
 commands:
-    tpll:
-        description: Tpll
     ll:
         aliases: [location, coordinates, co]
         usage: /<command>
@@ -14,11 +12,3 @@ commands:
         aliases: [nightvision]
         usage: /<command>
         description: Give the player night vision.
-    tp:
-    	aliases: [teleport]
-    	usage: /<command> <player>
-    	description: Tp command.
-   	tptoggle:
-   		aliases: [toggletp]
-   		useage: /<command>
-   		description: Toggles tp command, if enabled nobody will be able to teleport to you.

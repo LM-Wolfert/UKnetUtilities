@@ -2,27 +2,14 @@ package me.elgamer.UKnetUtilities.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.elgamer.UKnetUtilities.projections.ModifiedAirocean;
 import me.elgamer.UKnetUtilities.utils.LocationUtil;
 
-public class Tpll implements CommandExecutor {
+public class Tpll {
 
-	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-
-		//Check is command sender is a player
-		if (!(sender instanceof Player)) {
-			sender.sendMessage("&cYou cannot use this command from console!");
-			return true;
-		}
-
-		//Convert sender to player
-		Player p = (Player) sender;
+	public static boolean onCommand(Player p, String[] args) {
 
 		if (!(p.hasPermission("ukutils.tpll"))) {
 			p.sendMessage(ChatColor.RED + "You do not have permission for this command!");
