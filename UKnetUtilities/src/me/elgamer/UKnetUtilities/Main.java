@@ -1,5 +1,7 @@
 package me.elgamer.UKnetUtilities;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -9,9 +11,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import me.elgamer.UKnetUtilities.commands.FakeCommandRegistry;
 import me.elgamer.UKnetUtilities.commands.ll;
 import me.elgamer.UKnetUtilities.commands.nv;
-import me.elgamer.UKnetUtilities.listeners.CommandPreProcess;
+import me.elgamer.UKnetUtilities.gui.NavigationGUI;
+import me.elgamer.UKnetUtilities.listeners.InventoryClicked;
+import me.elgamer.UKnetUtilities.listeners.PlayerInteract;
 
 
 public class Main extends JavaPlugin {
@@ -43,15 +48,34 @@ public class Main extends JavaPlugin {
 			getCommand("ll").setExecutor(new ll());
 			getCommand("nv").setExecutor(new nv());
 			
-			new CommandPreProcess(this);
+			try {
+	            FakeCommandRegistry.registerFakeCommand(new FakeCommandRegistry("tpll"), this);
+	        } catch (NoSuchMethodException | SecurityException
+	                | IllegalAccessException | IllegalArgumentException
+	                | InvocationTargetException e) {
+	            e.printStackTrace();
+	        } catch (ReflectiveOperationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		} else if (config.getString("server_name").equals("Lobby")) {
 
 			//Create gui item				
-			gui = new ItemStack(Material.COMPASS);
+			gui = new ItemStack(Material.NETHER_STAR);
 			ItemMeta meta = gui.getItemMeta();
 			meta.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "Navigation Menu");
 			gui.setItemMeta(meta);
+			
+			//Listeners
+			new PlayerInteract(this, gui);
+			new InventoryClicked(this);
+			
+			//GUI
+			NavigationGUI.initialize();
+			
+			//Bungeecord
+			this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 			
 			//1 second timer.
 			this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
@@ -59,7 +83,7 @@ public class Main extends JavaPlugin {
 
 					for (Player p : Bukkit.getOnlinePlayers()) {
 						
-						p.getInventory().setItem(5, gui);
+						p.getInventory().setItem(4, gui);
 
 					}
 
@@ -72,12 +96,32 @@ public class Main extends JavaPlugin {
 			getCommand("ll").setExecutor(new ll());
 			getCommand("nv").setExecutor(new nv());
 			
-			new CommandPreProcess(this);
-			
+			try {
+	            FakeCommandRegistry.registerFakeCommand(new FakeCommandRegistry("tpll"), this);
+	        } catch (NoSuchMethodException | SecurityException
+	                | IllegalAccessException | IllegalArgumentException
+	                | InvocationTargetException e) {
+	            e.printStackTrace();
+	        } catch (ReflectiveOperationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		} else {
 			getCommand("ll").setExecutor(new ll());
 			getCommand("nv").setExecutor(new nv());
-			new CommandPreProcess(this);
+			
+			try {
+	            FakeCommandRegistry.registerFakeCommand(new FakeCommandRegistry("tpll"), this);
+	        } catch (NoSuchMethodException | SecurityException
+	                | IllegalAccessException | IllegalArgumentException
+	                | InvocationTargetException e) {
+	            e.printStackTrace();
+	        } catch (ReflectiveOperationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
 
 	}

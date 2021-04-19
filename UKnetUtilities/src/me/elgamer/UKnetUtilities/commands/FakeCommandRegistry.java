@@ -1,16 +1,49 @@
 package me.elgamer.UKnetUtilities.commands;
 
+import java.lang.reflect.Method;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import me.elgamer.UKnetUtilities.projections.ModifiedAirocean;
 import me.elgamer.UKnetUtilities.utils.LocationUtil;
 
-public class Tpll {
+public class FakeCommandRegistry extends BukkitCommand {
 
-	public static boolean onCommand(Player p, String[] args) {
+	public FakeCommandRegistry(String name) {
+		super(name);
+		// TODO Auto-generated constructor stub
+	}
+	
+	public static void registerFakeCommand(Command whatCommand,Plugin plugin)
+            throws ReflectiveOperationException {
+            //Getting command map from CraftServer
+            Method commandMap = plugin.getServer().getClass().getMethod("getCommandMap", null);
+            //Invoking the method and getting the returned object (SimpleCommandMap)
+            Object cmdmap = commandMap.invoke(plugin.getServer(), null);
+            //getting register method with parameters String and Command from SimpleCommandMap
+            Method register = cmdmap.getClass().getMethod("register", String.class,Command.class);
+            //Registering the command provided above
+            register.invoke(cmdmap, whatCommand.getName(),whatCommand);
+            //All the exceptions thrown above are due to reflection, They will be thrown if any of the above methods
+            //and objects used above change location or turn private. IF they do, let me know to update the thread!
+    }
 
+	@Override
+	public boolean execute(CommandSender sender, String arg, String[] args) {
+
+		if(!(sender instanceof Player)){
+            sender.sendMessage(ChatColor.RED+"Only players can do this!");
+            return true;
+        }
+		
+		Player p = (Player) sender;
+		
 		if (!(p.hasPermission("ukutils.tpll"))) {
 			p.sendMessage(ChatColor.RED + "You do not have permission for this command!");
 			return true;
@@ -84,7 +117,7 @@ public class Tpll {
 		}
 
 		p.teleport(loc);
-		p.sendMessage("Teleported " + p.getName() + " to " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ());
+		p.sendMessage(ChatColor.GRAY + "Teleported " + p.getName() + " to " + loc.getX() + ", " + loc.getY() + ", " + loc.getZ());
 
 		return true;
 	}
