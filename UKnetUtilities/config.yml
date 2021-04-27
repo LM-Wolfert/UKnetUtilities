@@ -1,3 +1,9 @@
 #Server name
 #Choose between the UKnet server: Earth, Building, Lobby, Minigames and Communitybuild
 server_name: Earth
+
+#If the server is Building specify the world name where tpll map be used
+world_name: buildWorld
+
+#Time between backups in hours.
+backup_interval: 3

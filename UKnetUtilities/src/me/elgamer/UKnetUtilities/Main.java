@@ -17,7 +17,7 @@ import me.elgamer.UKnetUtilities.commands.nv;
 import me.elgamer.UKnetUtilities.gui.NavigationGUI;
 import me.elgamer.UKnetUtilities.listeners.InventoryClicked;
 import me.elgamer.UKnetUtilities.listeners.PlayerInteract;
-
+import me.elgamer.UKnetUtilities.utils.Backup;
 
 public class Main extends JavaPlugin {
 
@@ -25,6 +25,9 @@ public class Main extends JavaPlugin {
 	static FileConfiguration config;
 	
 	public static ItemStack gui;
+	
+	public final static long hour = 20*60*60;
+	public long time;
 	
 	@Override
 	public void onEnable() {
@@ -34,7 +37,9 @@ public class Main extends JavaPlugin {
 		Main.config = this.getConfig();
 
 		saveDefaultConfig();
-
+		
+		time = hour*config.getLong("backup_interval");
+		
 		//Checking which functions to enable based on the server of the server
 		//Tpll is checked via the CommandPreProcess rather than an actual command
 		//This is to prevent it blocking the /tpll that is already existing on the earth server.
@@ -42,6 +47,15 @@ public class Main extends JavaPlugin {
 			
 			getCommand("ll").setExecutor(new ll());
 			getCommand("nv").setExecutor(new nv());
+			
+			//x hour timer, configurable in config.
+			this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+				public void run() {
+
+					Backup.runBackup();
+					
+				}
+			}, 0L, time);
 
 		} else if (config.getString("server_name").equals("Building")) {
 			
@@ -106,6 +120,15 @@ public class Main extends JavaPlugin {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			//x hour timer, configurable in config.
+			this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+				public void run() {
+
+					Backup.runBackup();
+					
+				}
+			}, 0L, time);
 
 		} else {
 			getCommand("ll").setExecutor(new ll());
