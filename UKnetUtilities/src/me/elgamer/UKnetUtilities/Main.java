@@ -1,10 +1,13 @@
 package me.elgamer.UKnetUtilities;
 
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -23,12 +26,18 @@ public class Main extends JavaPlugin {
 
 	static Main instance;
 	static FileConfiguration config;
-	
+
 	public static ItemStack gui;
-	
+
 	public final static long hour = 20*60*60;
 	public long time;
-	
+
+	public ItemStack slot5;
+	int hourTime;
+	int minuteTime;
+	int secondTime;
+	int i;
+
 	@Override
 	public void onEnable() {
 
@@ -37,38 +46,137 @@ public class Main extends JavaPlugin {
 		Main.config = this.getConfig();
 
 		saveDefaultConfig();
-		
+
 		time = hour*config.getLong("backup_interval");
+
+		LocalDateTime timeZone = LocalDateTime.now(ZoneId.of("Europe/London"));
+
+		String restartTimes = config.getString("restart_time");
+		String[] restart = restartTimes.split(",");
 		
+		String backupTimes = config.getString("backup_time");
+		String[] backups = backupTimes.split(",");
+
+		ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+
+		//1 minute timer
+		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {		
+			public void run() {
+
+				//Restart check
+				minuteTime = timeZone.getMinute();
+				
+				if (minuteTime == 58) {
+
+					for (String s : restart) {
+
+						try {
+
+							i = Integer.parseInt(s);
+							hourTime = timeZone.getHour();
+
+							if (i == 0) {
+
+								if (hourTime == 23 && i == 0) {
+
+									secondTime = timeZone.getSecond();
+
+									Bukkit.getScheduler().runTaskLater (instance, () -> Bukkit.broadcastMessage(ChatColor.RED + "The server is restarting in 1 minute!") , (60 - secondTime)*20); //20 ticks equal 1 second
+									Bukkit.getScheduler().runTaskLater (instance, () -> Bukkit.dispatchCommand(console, "/stop") , (60 - secondTime + 60)*20); //20 ticks equal 1 second
+								}
+
+							} else {
+
+								if (hourTime == i-1) {
+
+									secondTime = timeZone.getSecond();
+
+									Bukkit.getScheduler().runTaskLater (instance, () -> Bukkit.broadcastMessage(ChatColor.RED + "The server is restarting in 1 minute!") , (60 - secondTime)*20); //20 ticks equal 1 second
+									Bukkit.getScheduler().runTaskLater (instance, () -> Bukkit.dispatchCommand(console, "/stop") , (60 - secondTime + 60)*20); //20 ticks equal 1 second
+
+								}
+
+							}
+
+
+						} catch (NumberFormatException e) {
+							e.printStackTrace();
+						}
+
+					}
+
+				}
+			}		
+		}, 0L, 1200L);
+
 		//Checking which functions to enable based on the server of the server
 		//Tpll is checked via the CommandPreProcess rather than an actual command
 		//This is to prevent it blocking the /tpll that is already existing on the earth server.
 		if (config.getString("server_name").equals("Earth")) {
-			
+
 			getCommand("ll").setExecutor(new ll());
 			getCommand("nv").setExecutor(new nv());
-			
-			//x hour timer, configurable in config.
-			this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+
+			//1 minute timer
+			this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {		
 				public void run() {
 
-					Backup.runBackup();
+					//Backup check
+					minuteTime = timeZone.getMinute();
 					
-				}
-			}, 0L, time);
+					if (minuteTime == 59) {
+
+						for (String s : backups) {
+
+							try {
+
+								i = Integer.parseInt(s);
+								hourTime = timeZone.getHour();
+
+								if (i == 0) {
+
+									if (hourTime == 23 && i == 0) {
+
+										secondTime = timeZone.getSecond();
+
+										Backup.runBackup();
+									}
+
+								} else {
+
+									if (hourTime == i-1) {
+
+										secondTime = timeZone.getSecond();
+
+										Backup.runBackup();
+
+									}
+
+								}
+
+
+							} catch (NumberFormatException e) {
+								e.printStackTrace();
+							}
+
+						}
+
+					}
+				}		
+			}, 0L, 1200L);
 
 		} else if (config.getString("server_name").equals("Building")) {
-			
+
 			getCommand("ll").setExecutor(new ll());
 			getCommand("nv").setExecutor(new nv());
-			
+
 			try {
-	            FakeCommandRegistry.registerFakeCommand(new FakeCommandRegistry("tpll"), this);
-	        } catch (NoSuchMethodException | SecurityException
-	                | IllegalAccessException | IllegalArgumentException
-	                | InvocationTargetException e) {
-	            e.printStackTrace();
-	        } catch (ReflectiveOperationException e) {
+				FakeCommandRegistry.registerFakeCommand(new FakeCommandRegistry("tpll"), this);
+			} catch (NoSuchMethodException | SecurityException
+					| IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException e) {
+				e.printStackTrace();
+			} catch (ReflectiveOperationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -80,24 +188,34 @@ public class Main extends JavaPlugin {
 			ItemMeta meta = gui.getItemMeta();
 			meta.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "Navigation Menu");
 			gui.setItemMeta(meta);
-			
+
 			//Listeners
 			new PlayerInteract(this, gui);
 			new InventoryClicked(this);
-			
+
 			//GUI
 			NavigationGUI.initialize();
-			
+
 			//Bungeecord
 			this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-			
+
 			//1 second timer.
 			this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
 				public void run() {
 
 					for (Player p : Bukkit.getOnlinePlayers()) {
-						
-						p.getInventory().setItem(4, gui);
+
+						slot5 = p.getInventory().getItem(4);
+
+						if (!(slot5 == null)) {
+							if (slot5.equals(gui)) {
+
+							} else {
+								p.getInventory().setItem(4, gui);
+							}
+						} else {
+							p.getInventory().setItem(4, gui);
+						}
 
 					}
 
@@ -106,41 +224,80 @@ public class Main extends JavaPlugin {
 		} else if (config.getString("server_name").equals("Minigames")) {
 
 		} else if (config.getString("server_name").equals("Communitybuild")) {
-			
+
 			getCommand("ll").setExecutor(new ll());
 			getCommand("nv").setExecutor(new nv());
-			
+
 			try {
-	            FakeCommandRegistry.registerFakeCommand(new FakeCommandRegistry("tpll"), this);
-	        } catch (NoSuchMethodException | SecurityException
-	                | IllegalAccessException | IllegalArgumentException
-	                | InvocationTargetException e) {
-	            e.printStackTrace();
-	        } catch (ReflectiveOperationException e) {
+				FakeCommandRegistry.registerFakeCommand(new FakeCommandRegistry("tpll"), this);
+			} catch (NoSuchMethodException | SecurityException
+					| IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException e) {
+				e.printStackTrace();
+			} catch (ReflectiveOperationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			//x hour timer, configurable in config.
-			this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+
+			//1 minute timer
+			this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {		
 				public void run() {
 
-					Backup.runBackup();
+					//Backup check
+					minuteTime = timeZone.getMinute();
 					
-				}
-			}, 0L, time);
+					if (minuteTime == 59) {
+
+						for (String s : backups) {
+
+							try {
+
+								i = Integer.parseInt(s);
+								hourTime = timeZone.getHour();
+
+								if (i == 0) {
+
+									if (hourTime == 23 && i == 0) {
+
+										secondTime = timeZone.getSecond();
+
+										Backup.runBackup();
+									}
+
+								} else {
+
+									if (hourTime == i-1) {
+
+										secondTime = timeZone.getSecond();
+
+										Backup.runBackup();
+
+									}
+
+								}
+
+
+							} catch (NumberFormatException e) {
+								e.printStackTrace();
+							}
+
+						}
+
+					}
+				}		
+			}, 0L, 1200L);
 
 		} else {
 			getCommand("ll").setExecutor(new ll());
 			getCommand("nv").setExecutor(new nv());
-			
+
 			try {
-	            FakeCommandRegistry.registerFakeCommand(new FakeCommandRegistry("tpll"), this);
-	        } catch (NoSuchMethodException | SecurityException
-	                | IllegalAccessException | IllegalArgumentException
-	                | InvocationTargetException e) {
-	            e.printStackTrace();
-	        } catch (ReflectiveOperationException e) {
+				FakeCommandRegistry.registerFakeCommand(new FakeCommandRegistry("tpll"), this);
+			} catch (NoSuchMethodException | SecurityException
+					| IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException e) {
+				e.printStackTrace();
+			} catch (ReflectiveOperationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -148,9 +305,9 @@ public class Main extends JavaPlugin {
 		}
 
 	}
-	
+
 	public static Main getInstance() {
 		return instance;
 	}
-		
+
 }

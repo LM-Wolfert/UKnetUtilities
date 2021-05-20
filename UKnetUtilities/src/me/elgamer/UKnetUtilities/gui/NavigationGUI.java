@@ -38,11 +38,11 @@ public class NavigationGUI {
 				ChatColor.WHITE + "It is recommended to use the modpack for building.",
 				ChatColor.WHITE + "Supports 1.12.2 - 1.16.5 without the modpack.");		
 		CreateItem.createItem(inv, Material.BRICK, 1, 14, ChatColor.AQUA + "" + ChatColor.BOLD + "Building",
-				/*ChatColor.WHITE + "Teleport to the building server.",
+				ChatColor.WHITE + "Teleport to the building server.",
 				ChatColor.WHITE + "No requirements to start building.",
 				ChatColor.WHITE + "Recommended version is 1.16.5.",
-				ChatColor.WHITE + "Supports 1.12.2 - 1.16.5."*/
-				ChatColor.WHITE + "Coming Soon.");	
+				ChatColor.WHITE + "Supports 1.12.2 - 1.16.5.",
+				ChatColor.WHITE + "Currently in the Testing Phase!");	
 		CreateItem.createItem(inv, Material.PUMPKIN, 1, 16, ChatColor.AQUA + "" + ChatColor.BOLD + "Minigames",
 				ChatColor.WHITE + "Teleport to the minigames server.",
 				ChatColor.WHITE + "Current minigames: Hide'n'Seek.",
@@ -66,12 +66,10 @@ public class NavigationGUI {
 			p.sendPluginMessage(Main.getInstance(), "BungeeCord", out.toByteArray());
 		} else if (clicked.getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.AQUA + "" + ChatColor.BOLD + "Building")) {
 			p.closeInventory();
-			p.sendMessage(ChatColor.WHITE + "Coming Soon!");
-			/*
 			ByteArrayDataOutput out = ByteStreams.newDataOutput();
 			out.writeUTF("Connect");
 			out.writeUTF("building");
-			p.sendPluginMessage(Main.getInstance(), "BungeeCord", out.toByteArray());*/
+			p.sendPluginMessage(Main.getInstance(), "BungeeCord", out.toByteArray());
 		} else if (clicked.getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.AQUA + "" + ChatColor.BOLD + "Minigames")) {
 			p.closeInventory();
 			ByteArrayDataOutput out = ByteStreams.newDataOutput();

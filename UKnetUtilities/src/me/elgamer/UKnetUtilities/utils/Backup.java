@@ -29,7 +29,7 @@ public class Backup {
 		Bukkit.dispatchCommand(console, "save-on"), 90*second);
 		
 		Bukkit.getScheduler().runTaskLater (instance, () -> 
-		Bukkit.dispatchCommand(console, "say Backup Finished"), 91*second);
+		Bukkit.dispatchCommand(console, "say Backup Finished"), 9*second);
 		
 	}
 
