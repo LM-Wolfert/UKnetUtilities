@@ -49,8 +49,6 @@ public class Main extends JavaPlugin {
 
 		time = hour*config.getLong("backup_interval");
 
-		LocalDateTime timeZone = LocalDateTime.now(ZoneId.of("Europe/London"));
-
 		String restartTimes = config.getString("restart_time");
 		String[] restart = restartTimes.split(",");
 		
@@ -64,6 +62,7 @@ public class Main extends JavaPlugin {
 			public void run() {
 
 				//Restart check
+				LocalDateTime timeZone = LocalDateTime.now(ZoneId.of("Europe/London"));
 				minuteTime = timeZone.getMinute();
 				
 				if (minuteTime == 58) {
@@ -82,7 +81,7 @@ public class Main extends JavaPlugin {
 									secondTime = timeZone.getSecond();
 
 									Bukkit.getScheduler().runTaskLater (instance, () -> Bukkit.broadcastMessage(ChatColor.RED + "The server is restarting in 1 minute!") , (60 - secondTime)*20); //20 ticks equal 1 second
-									Bukkit.getScheduler().runTaskLater (instance, () -> Bukkit.dispatchCommand(console, "/stop") , (60 - secondTime + 60)*20); //20 ticks equal 1 second
+									Bukkit.getScheduler().runTaskLater (instance, () -> Bukkit.dispatchCommand(console, "stop") , (60 - secondTime + 60)*20); //20 ticks equal 1 second
 								}
 
 							} else {
@@ -92,7 +91,7 @@ public class Main extends JavaPlugin {
 									secondTime = timeZone.getSecond();
 
 									Bukkit.getScheduler().runTaskLater (instance, () -> Bukkit.broadcastMessage(ChatColor.RED + "The server is restarting in 1 minute!") , (60 - secondTime)*20); //20 ticks equal 1 second
-									Bukkit.getScheduler().runTaskLater (instance, () -> Bukkit.dispatchCommand(console, "/stop") , (60 - secondTime + 60)*20); //20 ticks equal 1 second
+									Bukkit.getScheduler().runTaskLater (instance, () -> Bukkit.dispatchCommand(console, "stop") , (60 - secondTime + 60)*20); //20 ticks equal 1 second
 
 								}
 
@@ -122,6 +121,7 @@ public class Main extends JavaPlugin {
 				public void run() {
 
 					//Backup check
+					LocalDateTime timeZone = LocalDateTime.now(ZoneId.of("Europe/London"));
 					minuteTime = timeZone.getMinute();
 					
 					if (minuteTime == 59) {
@@ -244,6 +244,7 @@ public class Main extends JavaPlugin {
 				public void run() {
 
 					//Backup check
+					LocalDateTime timeZone = LocalDateTime.now(ZoneId.of("Europe/London"));
 					minuteTime = timeZone.getMinute();
 					
 					if (minuteTime == 59) {

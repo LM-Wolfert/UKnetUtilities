@@ -17,7 +17,7 @@ public class ll implements CommandExecutor {
 
 		//Check is command sender is a player
 		if (!(sender instanceof Player)) {
-			sender.sendMessage("&cYou cannot use this command from the console!");
+			sender.sendMessage(ChatColor.RED+"Only players can do this!");
 			return true;
 		}
 

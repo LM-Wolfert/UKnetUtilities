@@ -15,6 +15,7 @@ public class Backup {
 		//20 ticks equal 1 second
 		final long second = 20;
 		
+		console.sendMessage("Starting Backup");
 		Bukkit.dispatchCommand(console, "say Starting Backup");
 		
 		Bukkit.dispatchCommand(console, "save-off");
