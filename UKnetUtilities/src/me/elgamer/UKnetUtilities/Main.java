@@ -46,7 +46,6 @@ public class Main extends JavaPlugin {
 		Main.config = this.getConfig();
 
 		saveDefaultConfig();
-
 		time = hour*config.getLong("backup_interval");
 
 		String restartTimes = config.getString("restart_time");
@@ -80,7 +79,7 @@ public class Main extends JavaPlugin {
 
 									secondTime = timeZone.getSecond();
 
-									Bukkit.getScheduler().runTaskLater (instance, () -> Bukkit.broadcastMessage(ChatColor.RED + "The server is restarting in 1 minute!") , (60 - secondTime)*20); //20 ticks equal 1 second
+									Bukkit.getScheduler().runTaskLater (instance, () -> Bukkit.dispatchCommand(console, "say The server is restarting in 1 minute!") , (60 - secondTime)*20); //20 ticks equal 1 second
 									Bukkit.getScheduler().runTaskLater (instance, () -> Bukkit.dispatchCommand(console, "stop") , (60 - secondTime + 60)*20); //20 ticks equal 1 second
 								}
 
@@ -90,7 +89,7 @@ public class Main extends JavaPlugin {
 
 									secondTime = timeZone.getSecond();
 
-									Bukkit.getScheduler().runTaskLater (instance, () -> Bukkit.broadcastMessage(ChatColor.RED + "The server is restarting in 1 minute!") , (60 - secondTime)*20); //20 ticks equal 1 second
+									Bukkit.getScheduler().runTaskLater (instance, () -> Bukkit.dispatchCommand(console, "say The server is restarting in 1 minute!") , (60 - secondTime)*20); //20 ticks equal 1 second
 									Bukkit.getScheduler().runTaskLater (instance, () -> Bukkit.dispatchCommand(console, "stop") , (60 - secondTime + 60)*20); //20 ticks equal 1 second
 
 								}
@@ -139,7 +138,7 @@ public class Main extends JavaPlugin {
 
 										secondTime = timeZone.getSecond();
 
-										Backup.runBackup();
+										Bukkit.getScheduler().runTaskLater (instance, () -> Backup.runBackup() , (60 - secondTime)*20); //20 ticks equal 1 second
 									}
 
 								} else {
@@ -148,7 +147,7 @@ public class Main extends JavaPlugin {
 
 										secondTime = timeZone.getSecond();
 
-										Backup.runBackup();
+										Bukkit.getScheduler().runTaskLater (instance, () -> Backup.runBackup() , (60 - secondTime)*20); //20 ticks equal 1 second
 
 									}
 
@@ -262,7 +261,7 @@ public class Main extends JavaPlugin {
 
 										secondTime = timeZone.getSecond();
 
-										Backup.runBackup();
+										Bukkit.getScheduler().runTaskLater (instance, () -> Backup.runBackup() , (60 - secondTime)*20); //20 ticks equal 1 second
 									}
 
 								} else {
@@ -271,7 +270,7 @@ public class Main extends JavaPlugin {
 
 										secondTime = timeZone.getSecond();
 
-										Backup.runBackup();
+										Bukkit.getScheduler().runTaskLater (instance, () -> Backup.runBackup() , (60 - secondTime)*20); //20 ticks equal 1 second
 
 									}
 
