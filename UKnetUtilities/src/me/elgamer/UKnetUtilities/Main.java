@@ -18,6 +18,7 @@ import me.elgamer.UKnetUtilities.commands.FakeCommandRegistry;
 import me.elgamer.UKnetUtilities.commands.ll;
 import me.elgamer.UKnetUtilities.commands.nv;
 import me.elgamer.UKnetUtilities.gui.NavigationGUI;
+import me.elgamer.UKnetUtilities.listeners.CommandListener;
 import me.elgamer.UKnetUtilities.listeners.InventoryClicked;
 import me.elgamer.UKnetUtilities.listeners.PlayerInteract;
 import me.elgamer.UKnetUtilities.utils.Backup;
@@ -114,6 +115,8 @@ public class Main extends JavaPlugin {
 
 			getCommand("ll").setExecutor(new ll());
 			getCommand("nv").setExecutor(new nv());
+			
+			new CommandListener(this);
 
 			//1 minute timer
 			this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {		
@@ -168,6 +171,8 @@ public class Main extends JavaPlugin {
 
 			getCommand("ll").setExecutor(new ll());
 			getCommand("nv").setExecutor(new nv());
+			
+			new CommandListener(this);
 
 			try {
 				FakeCommandRegistry.registerFakeCommand(new FakeCommandRegistry("tpll"), this);
