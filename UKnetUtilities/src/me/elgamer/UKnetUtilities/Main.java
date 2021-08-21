@@ -80,7 +80,7 @@ public class Main extends JavaPlugin {
 
 									secondTime = timeZone.getSecond();
 
-									Bukkit.getScheduler().runTaskLater (instance, () -> Bukkit.dispatchCommand(console, "say The server is restarting in 1 minute!") , (60 - secondTime)*20); //20 ticks equal 1 second
+									Bukkit.getScheduler().runTaskLater (instance, () -> Bukkit.dispatchCommand(console, "say The server is restarting in 1 minute!") , (60 - secondTime)*20); //20 ticks equal 1 second				
 									Bukkit.getScheduler().runTaskLater (instance, () -> Bukkit.dispatchCommand(console, "stop") , (60 - secondTime + 60)*20); //20 ticks equal 1 second
 								}
 
@@ -116,6 +116,7 @@ public class Main extends JavaPlugin {
 			getCommand("ll").setExecutor(new ll());
 			getCommand("nv").setExecutor(new nv());
 			
+			this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 			new CommandListener(this);
 
 			//1 minute timer
@@ -172,6 +173,7 @@ public class Main extends JavaPlugin {
 			getCommand("ll").setExecutor(new ll());
 			getCommand("nv").setExecutor(new nv());
 			
+			this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 			new CommandListener(this);
 
 			try {
