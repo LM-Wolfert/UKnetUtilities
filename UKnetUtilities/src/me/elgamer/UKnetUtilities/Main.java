@@ -3,6 +3,7 @@ package me.elgamer.UKnetUtilities;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,8 +21,12 @@ import me.elgamer.UKnetUtilities.commands.nv;
 import me.elgamer.UKnetUtilities.gui.NavigationGUI;
 import me.elgamer.UKnetUtilities.listeners.CommandListener;
 import me.elgamer.UKnetUtilities.listeners.InventoryClicked;
+import me.elgamer.UKnetUtilities.listeners.JoinEvent;
 import me.elgamer.UKnetUtilities.listeners.PlayerInteract;
+import me.elgamer.UKnetUtilities.listeners.QuitEvent;
 import me.elgamer.UKnetUtilities.utils.Backup;
+import mineverse.Aust1n46.chat.api.MineverseChatPlayer;
+import mineverse.Aust1n46.chat.channel.ChatChannel;
 
 public class Main extends JavaPlugin {
 
@@ -39,6 +44,8 @@ public class Main extends JavaPlugin {
 	int secondTime;
 	int i;
 
+	public static ArrayList<MineverseChatPlayer> vc;
+
 	@Override
 	public void onEnable() {
 
@@ -51,11 +58,13 @@ public class Main extends JavaPlugin {
 
 		String restartTimes = config.getString("restart_time");
 		String[] restart = restartTimes.split(",");
-		
+
 		String backupTimes = config.getString("backup_time");
 		String[] backups = backupTimes.split(",");
 
 		ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+
+		vc = new ArrayList<MineverseChatPlayer>();
 
 		//1 minute timer
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {		
@@ -64,7 +73,7 @@ public class Main extends JavaPlugin {
 				//Restart check
 				LocalDateTime timeZone = LocalDateTime.now(ZoneId.of("Europe/London"));
 				minuteTime = timeZone.getMinute();
-				
+
 				if (minuteTime == 58) {
 
 					for (String s : restart) {
@@ -115,10 +124,27 @@ public class Main extends JavaPlugin {
 
 			getCommand("ll").setExecutor(new ll());
 			getCommand("nv").setExecutor(new nv());
-			
+
 			this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 			new CommandListener(this);
 
+			new JoinEvent(this);
+			new QuitEvent(this);
+			
+			//1 second timer.
+			this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+				public void run() {
+
+					for (MineverseChatPlayer mp : vc) {
+
+						if (!(mp.getCurrentChannel().getName().equalsIgnoreCase("Earth") || mp.getCurrentChannel().getName().equalsIgnoreCase("Staff"))) {
+							mp.setCurrentChannel(ChatChannel.getChannel("Earth"));
+						}
+
+					}
+				}
+			}, 0L, 20L);
+			
 			//1 minute timer
 			this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {		
 				public void run() {
@@ -126,7 +152,7 @@ public class Main extends JavaPlugin {
 					//Backup check
 					LocalDateTime timeZone = LocalDateTime.now(ZoneId.of("Europe/London"));
 					minuteTime = timeZone.getMinute();
-					
+
 					if (minuteTime == 59) {
 
 						for (String s : backups) {
@@ -172,10 +198,27 @@ public class Main extends JavaPlugin {
 
 			getCommand("ll").setExecutor(new ll());
 			getCommand("nv").setExecutor(new nv());
-			
+
 			this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 			new CommandListener(this);
 
+			new JoinEvent(this);
+			new QuitEvent(this);
+			
+			//1 second timer.
+			this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+				public void run() {
+
+					for (MineverseChatPlayer mp : vc) {
+
+						if (!(mp.getCurrentChannel().getName().equalsIgnoreCase("Building") || mp.getCurrentChannel().getName().equalsIgnoreCase("Staff"))) {
+							mp.setCurrentChannel(ChatChannel.getChannel("Building"));
+						}
+
+					}
+				}
+			}, 0L, 20L);
+			
 			try {
 				FakeCommandRegistry.registerFakeCommand(new FakeCommandRegistry("tpll"), this);
 			} catch (NoSuchMethodException | SecurityException
@@ -199,6 +242,9 @@ public class Main extends JavaPlugin {
 			new PlayerInteract(this, gui);
 			new InventoryClicked(this);
 
+			new JoinEvent(this);
+			new QuitEvent(this);
+			
 			//GUI
 			NavigationGUI.initialize();
 
@@ -208,6 +254,14 @@ public class Main extends JavaPlugin {
 			//1 second timer.
 			this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
 				public void run() {
+
+					for (MineverseChatPlayer mp : vc) {
+
+						if (!(mp.getCurrentChannel().getName().equalsIgnoreCase("Lobby") || mp.getCurrentChannel().getName().equalsIgnoreCase("Staff"))) {
+							mp.setCurrentChannel(ChatChannel.getChannel("Lobby"));
+						}
+
+					}
 
 					for (Player p : Bukkit.getOnlinePlayers()) {
 
@@ -252,7 +306,7 @@ public class Main extends JavaPlugin {
 					//Backup check
 					LocalDateTime timeZone = LocalDateTime.now(ZoneId.of("Europe/London"));
 					minuteTime = timeZone.getMinute();
-					
+
 					if (minuteTime == 59) {
 
 						for (String s : backups) {

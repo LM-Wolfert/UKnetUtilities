@@ -2,7 +2,6 @@ package me.elgamer.UKnetUtilities.commands;
 
 import java.lang.reflect.Method;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -11,7 +10,6 @@ import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import me.elgamer.UKnetUtilities.Main;
 import me.elgamer.UKnetUtilities.projections.ModifiedAirocean;
 import me.elgamer.UKnetUtilities.utils.LocationUtil;
 
@@ -106,11 +104,8 @@ public class FakeCommandRegistry extends BukkitCommand {
 
 		try {
 
-			if (Main.getInstance().getConfig().getString("server_name").equals("Building")) {
-				loc = LocationUtil.getSafeDestination(new Location(Bukkit.getWorld(Main.getInstance().getConfig().getString("world_name")), proj[0], p.getWorld().getMaxHeight(), proj[1]));
-			} else {
-				loc = LocationUtil.getSafeDestination(new Location(p.getWorld(), proj[0], p.getWorld().getMaxHeight(), proj[1]));
-			}
+			loc = LocationUtil.getSafeDestination(new Location(p.getWorld(), proj[0], p.getWorld().getMaxHeight(), proj[1]));
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

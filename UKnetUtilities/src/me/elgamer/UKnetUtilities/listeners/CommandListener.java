@@ -24,7 +24,7 @@ public class CommandListener implements Listener {
 	@EventHandler
 	public void commandEvent(PlayerCommandPreprocessEvent e) {
 
-		if (e.getMessage().startsWith("/stop")) {
+		if (e.getMessage().startsWith("/stop") && e.getPlayer().hasPermission("group.admin")) {
 			ByteArrayDataOutput out = ByteStreams.newDataOutput();
 			out.writeUTF("Connect");
 			out.writeUTF("lobby");
