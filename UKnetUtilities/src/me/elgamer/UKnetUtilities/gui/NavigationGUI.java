@@ -41,11 +41,10 @@ public class NavigationGUI {
 				ChatColor.WHITE + "Teleport to the building server.",
 				ChatColor.WHITE + "No requirements to start building.",
 				ChatColor.WHITE + "Recommended version is 1.16.5.",
-				ChatColor.WHITE + "Supports 1.12.2 - 1.16.5.",
-				ChatColor.WHITE + "Currently in the Testing Phase!");	
+				ChatColor.WHITE + "Supports 1.12.2 - 1.17");	
 		CreateItem.createItem(inv, Material.PUMPKIN, 1, 16, ChatColor.AQUA + "" + ChatColor.BOLD + "Minigames",
 				ChatColor.WHITE + "Teleport to the minigames server.",
-				ChatColor.WHITE + "Current minigames: Hide'n'Seek.",
+				ChatColor.WHITE + "Currenly Closed!",
 				ChatColor.WHITE + "Supports 1.12.2 - 1.16.5.");	
 		
 		toReturn.setContents(inv.getContents());
@@ -71,12 +70,15 @@ public class NavigationGUI {
 			out.writeUTF("building");
 			p.sendPluginMessage(Main.getInstance(), "BungeeCord", out.toByteArray());
 		} else if (clicked.getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.AQUA + "" + ChatColor.BOLD + "Minigames")) {
+			p.sendMessage(ChatColor.RED + "Closed until further notice!");
+			/*
 			p.closeInventory();
 			ByteArrayDataOutput out = ByteStreams.newDataOutput();
 			out.writeUTF("Connect");
 			out.writeUTF("minigames");
 
 			p.sendPluginMessage(Main.getInstance(), "BungeeCord", out.toByteArray());
+			*/
 		} 
 	}
 
