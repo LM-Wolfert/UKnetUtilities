@@ -36,7 +36,7 @@ public class NavigationGUI {
 				ChatColor.WHITE + "Teleport to the earth server.",
 				ChatColor.WHITE + "If you wish to build you must be Jr.Builder+",
 				ChatColor.WHITE + "It is recommended to use the modpack for building.",
-				ChatColor.WHITE + "Supports 1.12.2 - 1.16.5 without the modpack.");		
+				ChatColor.WHITE + "Supports 1.12.2 - 1.17 without the modpack.");		
 		CreateItem.createItem(inv, Material.BRICK, 1, 14, ChatColor.AQUA + "" + ChatColor.BOLD + "Building",
 				ChatColor.WHITE + "Teleport to the building server.",
 				ChatColor.WHITE + "No requirements to start building.",

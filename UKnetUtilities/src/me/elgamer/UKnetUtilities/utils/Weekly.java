@@ -1,3 +1,4 @@
+/*
 package me.elgamer.UKnetUtilities.utils;
 
 import java.sql.PreparedStatement;
@@ -83,3 +84,4 @@ public class Weekly {
 		}
 	}
 }
+*/
