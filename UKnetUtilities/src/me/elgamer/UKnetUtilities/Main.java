@@ -13,9 +13,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.elgamer.UKnetUtilities.commands.FakeCommandRegistry;
+import me.elgamer.UKnetUtilities.commands.Promote;
 import me.elgamer.UKnetUtilities.commands.ll;
 import me.elgamer.UKnetUtilities.commands.nv;
 import me.elgamer.UKnetUtilities.gui.NavigationGUI;
@@ -27,6 +29,7 @@ import me.elgamer.UKnetUtilities.listeners.QuitEvent;
 import me.elgamer.UKnetUtilities.utils.Backup;
 import mineverse.Aust1n46.chat.api.MineverseChatPlayer;
 import mineverse.Aust1n46.chat.channel.ChatChannel;
+import net.luckperms.api.LuckPerms;
 
 public class Main extends JavaPlugin {
 
@@ -43,6 +46,8 @@ public class Main extends JavaPlugin {
 	int minuteTime;
 	int secondTime;
 	int i;
+	
+	public static LuckPerms lp;
 
 	public static ArrayList<MineverseChatPlayer> vc;
 
@@ -65,6 +70,15 @@ public class Main extends JavaPlugin {
 		ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 
 		vc = new ArrayList<MineverseChatPlayer>();
+		
+		RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+		if (provider != null) {
+		    lp = provider.getProvider();
+		    
+		}
+		
+		//Enable the promote command.
+		getCommand("promote").setExecutor(new Promote());
 
 		//1 minute timer
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {		
@@ -369,6 +383,10 @@ public class Main extends JavaPlugin {
 
 	public static Main getInstance() {
 		return instance;
+	}
+	
+	public static LuckPerms getLuckPerms() {
+		return lp;
 	}
 
 }

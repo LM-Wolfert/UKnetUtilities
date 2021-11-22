@@ -1,4 +1,3 @@
-/*
 package me.elgamer.UKnetUtilities.utils;
 
 import org.bukkit.Bukkit;
@@ -8,7 +7,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
 public class BukkitScoreboard {
-
+/*
 	ScoreboardManager manager;
 	Scoreboard board;
 	
@@ -43,6 +42,5 @@ public class BukkitScoreboard {
 	public void pointsWeeklyTop() {
 
 	}
-
-}
 */
+}

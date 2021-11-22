@@ -1,4 +1,3 @@
-/*
 package me.elgamer.UKnetUtilities.utils;
 
 import java.io.File;
@@ -11,7 +10,7 @@ import me.elgamer.UKnetUtilities.Main;
 
 
 public class Points {
-
+/*
 	Main instance = Main.getInstance(); 
 	
 	public Leaderboard getOrderedPoints(String uuid, Leaderboard lead) {
@@ -85,6 +84,5 @@ public class Points {
 			return lead;
 		}
 	}
-
-}
 */
+}

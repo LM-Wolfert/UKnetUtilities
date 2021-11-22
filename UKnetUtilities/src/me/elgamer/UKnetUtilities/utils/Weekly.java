@@ -1,4 +1,3 @@
-/*
 package me.elgamer.UKnetUtilities.utils;
 
 import java.sql.PreparedStatement;
@@ -9,7 +8,7 @@ import me.elgamer.UKnetUtilities.Main;
 
 
 public class Weekly {
-
+/*
 	Main instance = Main.getInstance(); 
 
 	public Leaderboard getOrderedPoints(String uuid, Leaderboard lead) {
@@ -83,5 +82,5 @@ public class Weekly {
 			return lead;
 		}
 	}
+	*/
 }
-*/
