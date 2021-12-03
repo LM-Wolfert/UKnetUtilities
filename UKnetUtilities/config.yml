@@ -10,3 +10,10 @@ backup_time: 2,6,10,14,17,20,23
 
 #Restart times, separate with comma (,)
 restart_time: 3,18
+
+#MySQL connection
+host: localhost
+port: 3306
+username: root
+password: password
+database: minecraft_uknet

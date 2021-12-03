@@ -1,9 +1,13 @@
 package me.elgamer.UKnetUtilities;
 
 import java.lang.reflect.InvocationTargetException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+
+import javax.sql.DataSource;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -15,6 +19,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource;
+import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 import me.elgamer.UKnetUtilities.commands.FakeCommandRegistry;
 import me.elgamer.UKnetUtilities.commands.Promote;
@@ -46,10 +53,15 @@ public class Main extends JavaPlugin {
 	int minuteTime;
 	int secondTime;
 	int i;
-	
+
 	public static LuckPerms lp;
 
 	public static ArrayList<MineverseChatPlayer> vc;
+
+	//MySQL
+	public DataSource dataSource;
+	private String host, database, username, password;
+	private int port;
 
 	@Override
 	public void onEnable() {
@@ -67,18 +79,28 @@ public class Main extends JavaPlugin {
 		String backupTimes = config.getString("backup_time");
 		String[] backups = backupTimes.split(",");
 
+		//Create a console instance.
 		ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 
 		vc = new ArrayList<MineverseChatPlayer>();
-		
+
+		//Register luckperms
 		RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
 		if (provider != null) {
-		    lp = provider.getProvider();
-		    
+			lp = provider.getProvider();		 
 		}
-		
+
 		//Enable the promote command.
 		getCommand("promote").setExecutor(new Promote());
+
+		//Load MySQL	
+		try {
+			dataSource = mysqlSetup();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		//1 minute timer
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {		
@@ -144,7 +166,7 @@ public class Main extends JavaPlugin {
 
 			new JoinEvent(this);
 			new QuitEvent(this);
-			
+
 			//1 second timer.
 			this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
 				public void run() {
@@ -158,7 +180,7 @@ public class Main extends JavaPlugin {
 					}
 				}
 			}, 0L, 20L);
-			
+
 			//1 minute timer
 			this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {		
 				public void run() {
@@ -218,7 +240,7 @@ public class Main extends JavaPlugin {
 
 			new JoinEvent(this);
 			new QuitEvent(this);
-			
+
 			//1 second timer.
 			this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
 				public void run() {
@@ -232,7 +254,7 @@ public class Main extends JavaPlugin {
 					}
 				}
 			}, 0L, 20L);
-			
+
 			try {
 				FakeCommandRegistry.registerFakeCommand(new FakeCommandRegistry("tpll"), this);
 			} catch (NoSuchMethodException | SecurityException
@@ -258,7 +280,7 @@ public class Main extends JavaPlugin {
 
 			new JoinEvent(this);
 			new QuitEvent(this);
-			
+
 			//GUI
 			NavigationGUI.initialize();
 
@@ -384,9 +406,39 @@ public class Main extends JavaPlugin {
 	public static Main getInstance() {
 		return instance;
 	}
-	
+
 	public static LuckPerms getLuckPerms() {
 		return lp;
+	}
+
+	//Creates the mysql connection.
+	private DataSource mysqlSetup() throws SQLException {
+
+		host = config.getString("host");
+		port = config.getInt("port");
+		database = config.getString("database");
+		username = config.getString("username");
+		password = config.getString("password");
+
+		MysqlDataSource dataSource = new MysqlConnectionPoolDataSource();
+
+		dataSource.setServerName(host);
+		dataSource.setPortNumber(port);
+		dataSource.setDatabaseName(database + "?&useSSL=false&");
+		dataSource.setUser(username);
+		dataSource.setPassword(password);
+
+		testDataSource(dataSource);
+		return dataSource;
+
+	}
+
+	private void testDataSource(DataSource dataSource) throws SQLException {
+		try (Connection connection = dataSource.getConnection()) {
+			if (!connection.isValid(1000)) {
+				throw new SQLException("Could not establish database connection.");
+			}
+		}
 	}
 
 }
