@@ -20,8 +20,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource;
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
+import com.mysql.cj.jdbc.MysqlDataSource;
 
 import me.elgamer.UKnetUtilities.commands.FakeCommandRegistry;
 import me.elgamer.UKnetUtilities.commands.Promote;
@@ -93,14 +93,15 @@ public class Main extends JavaPlugin {
 		//Enable the promote command.
 		getCommand("promote").setExecutor(new Promote());
 
-		//Load MySQL	
+		//Load MySQL
+		/*
 		try {
 			dataSource = mysqlSetup();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 
 		//1 minute timer
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {		
@@ -317,73 +318,6 @@ public class Main extends JavaPlugin {
 
 				}
 			}, 0L, 20L);
-		} else if (config.getString("server_name").equals("Minigames")) {
-
-		} else if (config.getString("server_name").equals("Communitybuild")) {
-
-			getCommand("ll").setExecutor(new ll());
-			getCommand("nv").setExecutor(new nv());
-
-			try {
-				FakeCommandRegistry.registerFakeCommand(new FakeCommandRegistry("tpll"), this);
-			} catch (NoSuchMethodException | SecurityException
-					| IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException e) {
-				e.printStackTrace();
-			} catch (ReflectiveOperationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			//1 minute timer
-			this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {		
-				public void run() {
-
-					//Backup check
-					LocalDateTime timeZone = LocalDateTime.now(ZoneId.of("Europe/London"));
-					minuteTime = timeZone.getMinute();
-
-					if (minuteTime == 59) {
-
-						for (String s : backups) {
-
-							try {
-
-								i = Integer.parseInt(s);
-								hourTime = timeZone.getHour();
-
-								if (i == 0) {
-
-									if (hourTime == 23 && i == 0) {
-
-										secondTime = timeZone.getSecond();
-
-										Bukkit.getScheduler().runTaskLater (instance, () -> Backup.runBackup() , (60 - secondTime)*20); //20 ticks equal 1 second
-									}
-
-								} else {
-
-									if (hourTime == i-1) {
-
-										secondTime = timeZone.getSecond();
-
-										Bukkit.getScheduler().runTaskLater (instance, () -> Backup.runBackup() , (60 - secondTime)*20); //20 ticks equal 1 second
-
-									}
-
-								}
-
-
-							} catch (NumberFormatException e) {
-								e.printStackTrace();
-							}
-
-						}
-
-					}
-				}		
-			}, 0L, 1200L);
-
 		} else {
 			getCommand("ll").setExecutor(new ll());
 			getCommand("nv").setExecutor(new nv());

@@ -73,7 +73,8 @@ public class Promote implements CommandExecutor {
 								if (group.equalsIgnoreCase("jrbuilder")) {
 									sender.sendMessage(ChatColor.RED + args[0] + " is already a Jr.Builder.");
 								} else {
-									user.setPrimaryGroup("jrbuilder");
+									user.data().add(newGroup);
+									user.data().remove(primary);
 									sender.sendMessage(ChatColor.GREEN + args[0] + " has been promoted to Jr.Builder.");
 								}
 								break;

@@ -6,8 +6,9 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Users/Laurens/Downloads/spigot-1.16.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Laurens/Downloads/spigot-1.17.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Laurens/Downloads/VentureChat-3.2.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Laurens/Downloads/LuckPerms-Bukkit-5.3.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Laurens/Downloads/jar_files (3)/mysql-connector-java-8.0.27.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
